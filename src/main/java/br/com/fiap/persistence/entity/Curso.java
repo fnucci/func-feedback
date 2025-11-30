@@ -23,9 +23,9 @@ public class Curso {
 
     @ManyToMany
     @JoinTable(
-            name = "curso_alunos",
-            joinColumns = @JoinColumn(name = "curso_id"),
-            inverseJoinColumns = @JoinColumn(name = "aluno_id")
+            name = "course_students",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private List<Aluno> students;
 

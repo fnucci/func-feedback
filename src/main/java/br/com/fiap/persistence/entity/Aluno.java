@@ -35,7 +35,7 @@ public class Aluno {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "alunos")
-    private List<Curso> cursos;
+    @ManyToMany(mappedBy = "students")
+    private List<Curso> courses;
 
 }

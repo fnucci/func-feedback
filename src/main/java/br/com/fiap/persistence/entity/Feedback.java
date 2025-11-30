@@ -17,11 +17,11 @@ public class Feedback {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "aluno_id", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private Aluno student;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "curso_id", nullable = false)
+    @JoinColumn(name = "course_id", nullable = false)
     private Curso course;
 
     @Column(name = "grade", nullable = false)
