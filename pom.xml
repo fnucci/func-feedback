@@ -28,6 +28,8 @@
                 <scope>import</scope>
             </dependency>
         </dependencies>
+
+
     </dependencyManagement>
 
     <dependencies>
@@ -79,6 +81,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-jackson</artifactId>
+            <version>${quarkus.platform.version}</version>
         </dependency>
     </dependencies>
 
