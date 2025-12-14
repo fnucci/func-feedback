@@ -12,6 +12,6 @@ public record CursoResponse(
         ModelType model,
         Boolean active,
         OffsetDateTime createdAt,
-        List<Aluno> students
+        List<AlunoResponse> students
 ) {
 }

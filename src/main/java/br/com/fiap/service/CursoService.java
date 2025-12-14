@@ -12,6 +12,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 @ApplicationScoped
 public class CursoService {
 
@@ -42,5 +45,13 @@ public class CursoService {
         //cadastra o aluno
         cursoRepository.persist(curso);
         return new MatriculaResponse("Aluno matriculado com sucesso !");
+    }
+
+    @Transactional
+    public List<CursoResponse> listarCursos() {
+        Stream<Curso> cursoStream = cursoRepository.streamAll();
+        return cursoStream
+                .map(CursoPresenter::toResponse)
+                .collect(java.util.stream.Collectors.toList());
     }
 }

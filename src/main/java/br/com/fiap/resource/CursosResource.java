@@ -11,6 +11,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.List;
+
 @ApplicationScoped
 @Path("/cursos")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -34,6 +36,16 @@ public class CursosResource {
     public Response matricularAluno(MatriculaDTO matriculaDTO) {
 
         MatriculaResponse response = cursoService.matricularAluno(matriculaDTO);
+
+        return Response.status(Response.Status.OK)
+                .entity(response)
+                .build();
+    }
+
+    @GET
+    public Response listarCursos() {
+
+        List<CursoResponse> response = cursoService.listarCursos();
 
         return Response.status(Response.Status.OK)
                 .entity(response)

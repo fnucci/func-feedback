@@ -9,7 +9,6 @@ public record AlunoResponse (
         Long id,
         String name,
         String email,
-        OffsetDateTime createdAt,
-        List<Curso> courses
+        OffsetDateTime createdAt
 ) {
 }

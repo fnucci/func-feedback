@@ -6,6 +6,6 @@ import br.com.fiap.persistence.entity.Aluno;
 public class AlunoPresenter {
 
     public static AlunoResponse toResponse(Aluno aluno){
-        return new AlunoResponse(aluno.getId(), aluno.getName(), aluno.getEmail(), aluno.getCreatedAt(), aluno.getCourses());
+        return new AlunoResponse(aluno.getId(), aluno.getName(), aluno.getEmail(), aluno.getCreatedAt());
     }
 }

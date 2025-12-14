@@ -9,6 +9,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static io.quarkus.hibernate.orm.panache.PanacheEntityBase.listAll;
+
 @ApplicationScoped
 public class AlunoService {
 
@@ -28,5 +33,12 @@ public class AlunoService {
     public Aluno findById(Long alunoId) {
         // Lógica para cadastrar um aluno
         return alunoRepository.findById(alunoId);
+    }
+
+    public List<AlunoResponse> listarAlunos() {
+        List<Aluno> alunos = alunoRepository.listAll();
+        return alunos.stream()
+                .map(AlunoPresenter::toResponse)
+                .collect(Collectors.toList());
     }
 }
