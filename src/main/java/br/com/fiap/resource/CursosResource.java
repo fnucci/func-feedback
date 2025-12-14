@@ -12,7 +12,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @ApplicationScoped
-@Path("/alunos")
+@Path("/cursos")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class CursosResource {
@@ -21,7 +21,7 @@ public class CursosResource {
     CursoService cursoService;
 
     @POST
-    public Response cadastrarAluno(CursoDTO cursoDTO) {
+    public Response cadastrarCurso(CursoDTO cursoDTO) {
 
         CursoResponse response = cursoService.cadastrarCurso(cursoDTO);
 
@@ -31,11 +31,11 @@ public class CursosResource {
     }
 
     @PUT
-    public Response cadastrarAluno(MatriculaDTO matriculaDTO) {
+    public Response matricularAluno(MatriculaDTO matriculaDTO) {
 
         MatriculaResponse response = cursoService.matricularAluno(matriculaDTO);
 
-        return Response.status(Response.Status.CREATED)
+        return Response.status(Response.Status.OK)
                 .entity(response)
                 .build();
     }
