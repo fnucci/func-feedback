@@ -1,8 +1,10 @@
 package br.com.fiap.persistence.entity;
 
+import br.com.fiap.model.in.FeedbackDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 
@@ -10,6 +12,7 @@ import java.time.OffsetDateTime;
 @Table(name = "feedbacks")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Feedback {
 
     @Id
@@ -27,9 +30,24 @@ public class Feedback {
     @Column(name = "grade", nullable = false)
     private Short grade;
 
+    @Column(name = "comment")
+    private String comment;
+
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
+
+    public static Feedback fromFeedbackDTO(FeedbackDTO feedbackDTO, Aluno aluno, Curso curso) {
+        OffsetDateTime agora = OffsetDateTime.now();
+        Feedback feedback = new Feedback();
+        feedback.setStudent(aluno);
+        feedback.setCourse(curso);
+        feedback.setGrade(feedbackDTO.grade());
+        feedback.setComment(feedbackDTO.comentario());
+        feedback.setCreatedAt(agora);
+        feedback.setUpdatedAt(agora);
+        return feedback;
+    }
 }

@@ -1,10 +1,10 @@
 package br.com.fiap.persistence.entity;
 
 import br.com.fiap.model.in.AlunoDTO;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -15,6 +15,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Aluno {
 
     @Id
@@ -40,6 +42,8 @@ public class Aluno {
     private OffsetDateTime updatedAt;
 
     @ManyToMany(mappedBy = "students")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Curso> courses;
 
 

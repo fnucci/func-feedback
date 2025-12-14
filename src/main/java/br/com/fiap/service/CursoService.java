@@ -54,4 +54,8 @@ public class CursoService {
                 .map(CursoPresenter::toResponse)
                 .collect(java.util.stream.Collectors.toList());
     }
+
+    public Curso findById(Long cursoId) {
+        return cursoRepository.findById(cursoId);
+    }
 }

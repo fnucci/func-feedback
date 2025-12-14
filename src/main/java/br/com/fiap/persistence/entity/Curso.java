@@ -1,10 +1,10 @@
 package br.com.fiap.persistence.entity;
 
 import br.com.fiap.model.in.CursoDTO;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Curso {
 
     @Id
@@ -30,6 +32,8 @@ public class Curso {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Aluno> students;
 
     @Column(name = "model", nullable = false, unique = true)
