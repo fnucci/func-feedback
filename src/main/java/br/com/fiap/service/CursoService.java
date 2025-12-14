@@ -1,5 +1,6 @@
 package br.com.fiap.service;
 
+import br.com.fiap.exception.AlunoJaMatriculadoException;
 import br.com.fiap.model.in.CursoDTO;
 import br.com.fiap.model.in.MatriculaDTO;
 import br.com.fiap.model.out.CursoResponse;
@@ -40,7 +41,10 @@ public class CursoService {
 
         Aluno aluno = alunoService.findById(matriculaDTO.alunoId());
 
-        curso.addStudent(aluno);
+        if(curso.getStudents().contains(aluno)) {
+            throw new AlunoJaMatriculadoException("Aluno já está matriculado nesse curso.");
+        }else
+            curso.addStudent(aluno);
 
         //cadastra o aluno
         cursoRepository.persist(curso);
