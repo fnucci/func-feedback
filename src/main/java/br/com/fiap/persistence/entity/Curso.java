@@ -36,7 +36,7 @@ public class Curso {
     @EqualsAndHashCode.Exclude
     private List<Aluno> students;
 
-    @Column(name = "model", nullable = false, unique = true)
+    @Column(name = "model", nullable = false)
     private ModelType model;
 
     @Column(name = "active", nullable = false)
