@@ -1,0 +1,46 @@
+package br.com.fiap.service;
+
+import br.com.fiap.model.in.CursoDTO;
+import br.com.fiap.model.in.MatriculaDTO;
+import br.com.fiap.model.out.CursoResponse;
+import br.com.fiap.model.out.MatriculaResponse;
+import br.com.fiap.persistence.entity.Aluno;
+import br.com.fiap.persistence.entity.Curso;
+import br.com.fiap.persistence.repository.CursoRepository;
+import br.com.fiap.presenter.CursoPresenter;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+
+@ApplicationScoped
+public class CursoService {
+
+    @Inject
+    CursoRepository cursoRepository;
+
+    @Inject
+    AlunoService alunoService;
+
+    @Transactional
+    public CursoResponse cadastrarCurso(CursoDTO cursoDTO) {
+        // Lógica para cadastrar um aluno
+        Curso curso = Curso.fromCursoDTO(cursoDTO);
+        //cadastra o aluno
+        cursoRepository.persist(curso);
+        return CursoPresenter.toResponse(curso);
+    }
+
+    @Transactional
+    public MatriculaResponse matricularAluno(MatriculaDTO matriculaDTO) {
+        // Lógica para cadastrar um aluno
+        Curso curso = cursoRepository.findById(matriculaDTO.cursoId());
+
+        Aluno aluno = alunoService.findById(matriculaDTO.alunoId());
+
+        curso.addStudent(aluno);
+
+        //cadastra o aluno
+        cursoRepository.persist(curso);
+        return new MatriculaResponse("Aluno matriculado com sucesso !");
+    }
+}

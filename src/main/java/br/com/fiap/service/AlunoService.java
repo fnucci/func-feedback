@@ -23,4 +23,10 @@ public class AlunoService {
         alunoRepository.persist(aluno);
         return AlunoPresenter.toResponse(aluno);
     }
+
+    @Transactional
+    public Aluno findById(Long alunoId) {
+        // Lógica para cadastrar um aluno
+        return alunoRepository.findById(alunoId);
+    }
 }
