@@ -59,7 +59,7 @@ jobs:
         with:
           app-name: 'func-feedback'
           slot-name: 'Production'
-          package: 'func-feedback-1.0.0-SNAPSHOT.jar'
+          package: 'func-feedback*.jar'
 
           
 

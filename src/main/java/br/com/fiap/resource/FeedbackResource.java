@@ -3,28 +3,41 @@ package br.com.fiap.resource;
 import br.com.fiap.model.in.FeedbackDTO;
 import br.com.fiap.model.out.FeedbackResponse;
 import br.com.fiap.service.FeedbackService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.azure.functions.*;
+import com.microsoft.azure.functions.annotation.AuthorizationLevel;
+import com.microsoft.azure.functions.annotation.FunctionName;
+import com.microsoft.azure.functions.annotation.HttpTrigger;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+
+import java.util.Optional;
 
 @ApplicationScoped
-@Path("/feedbacks")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class FeedbackResource {
 
     @Inject
     FeedbackService feedbackService;
 
-    @POST
-    public Response cadastrarFeedback(FeedbackDTO feedbackDTO) {
+    @FunctionName("cadastrarFeedback")
+    public HttpResponseMessage cadastrarFeedback(@HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request, final ExecutionContext context) {
+
+        context.getLogger().info("Processing feedback submission.");
+
+        FeedbackDTO feedbackDTO;
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            feedbackDTO = mapper.readValue(request.getBody().orElse("{}"), FeedbackDTO.class);
+
+        } catch (Exception e) {
+            context.getLogger().severe("Error parsing request body: " + e.getMessage());
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST)
+                    .body("Invalid feedback data").build();
+        }
 
         FeedbackResponse response = feedbackService.cadastrarFeedback(feedbackDTO);
 
-        return Response.status(Response.Status.CREATED)
-                .entity(response)
-                .build();
+        return request.createResponseBuilder(HttpStatus.CREATED).body(response).build();
     }
 }
