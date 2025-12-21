@@ -20,7 +20,9 @@ public class FeedbackResource {
     FeedbackService feedbackService;
 
     @FunctionName("cadastrarFeedback")
-    public HttpResponseMessage cadastrarFeedback(@HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request, final ExecutionContext context) {
+    public HttpResponseMessage run(
+            @HttpTrigger(name = "req", methods = {HttpMethod.POST}, authLevel = AuthorizationLevel.FUNCTION) HttpRequestMessage<Optional<String>> request
+            , final ExecutionContext context) {
 
         context.getLogger().info("Processing feedback submission.");
 
