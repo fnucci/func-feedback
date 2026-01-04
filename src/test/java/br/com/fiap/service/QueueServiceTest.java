@@ -56,7 +56,7 @@ public class QueueServiceTest {
         when(mockSqs.receiveMessage(any(ReceiveMessageRequest.class))).thenReturn(emptyResponse);
 
         // act
-        Message result = service.recieveMessage();
+        Message result = service.receiveMessage();
 
         // assert
         assertNull(result);
@@ -83,7 +83,7 @@ public class QueueServiceTest {
         when(mockSqs.deleteMessage(any(DeleteMessageRequest.class))).thenReturn(DeleteMessageResponse.builder().build());
 
         // act
-        Message result = service.recieveMessage();
+        Message result = service.receiveMessage();
 
         // assert
         assertSame(msg, result);

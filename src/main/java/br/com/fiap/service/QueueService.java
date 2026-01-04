@@ -1,13 +1,11 @@
 package br.com.fiap.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
-import software.amazon.awssdk.services.sqs.model.Message;
-import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
-import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.*;
 
 import java.util.List;
 
@@ -17,39 +15,41 @@ public class QueueService {
     private SqsClient sqsClient;
 
     @ConfigProperty(name = "sqs.queue.url")
-    private String queueUrl;
+    String queueUrl;
 
-    public QueueService() {
+    @ConfigProperty(name = "aws.region", defaultValue = "sa-east-1")
+    String awsRegion;
+
+    @PostConstruct
+    void init() {
         this.sqsClient = SqsClient.builder()
-                .region(Region.US_EAST_1)
+                .region(Region.of(awsRegion))
                 .build();
     }
 
     public void sendMessage(String messageBody) {
-        SendMessageRequest request = SendMessageRequest.builder()
+        sqsClient.sendMessage(SendMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .messageBody(messageBody)
-                .build();
-        sqsClient.sendMessage(request);
-
+                .build());
     }
 
-    public Message recieveMessage() {
-        ReceiveMessageRequest request = ReceiveMessageRequest.builder()
+    public Message receiveMessage() {
+        List<Message> messages = sqsClient.receiveMessage(ReceiveMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .maxNumberOfMessages(1)
-                .build();
-        List<Message> messages = sqsClient.receiveMessage(request
-        ).messages();
+                .waitTimeSeconds(5) // long polling (melhor)
+                .build()).messages();
 
-        if (messages.isEmpty()) {
-            return null;
-        }
-        DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
+        if (messages.isEmpty()) return null;
+
+        Message msg = messages.get(0);
+
+        sqsClient.deleteMessage(DeleteMessageRequest.builder()
                 .queueUrl(queueUrl)
-                .receiptHandle(messages.get(0).receiptHandle())
-                .build();
-        sqsClient.deleteMessage(deleteMessageRequest);
-        return messages.get(0);
+                .receiptHandle(msg.receiptHandle())
+                .build());
+
+        return msg;
     }
 }
