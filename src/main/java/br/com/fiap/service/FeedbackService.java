@@ -31,9 +31,9 @@ public class FeedbackService {
     @Transactional
     public FeedbackResponse cadastrarFeedback(FeedbackDTO feedbackDTO) {
 
-        Aluno aluno = alunoService.findById(feedbackDTO.alunoId());
+        Aluno aluno = alunoService.findById(feedbackDTO.getAlunoId());
 
-        Curso curso = cursoService.findById(feedbackDTO.cursoId());
+        Curso curso = cursoService.findById(feedbackDTO.getCursoId());
 
         if (curso.getStudents().contains(aluno)) {
             Feedback feedback = Feedback.fromFeedbackDTO(feedbackDTO, aluno, curso);

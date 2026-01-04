@@ -44,8 +44,8 @@ public class Feedback {
         Feedback feedback = new Feedback();
         feedback.setStudent(aluno);
         feedback.setCourse(curso);
-        feedback.setGrade(feedbackDTO.grade());
-        feedback.setComment(feedbackDTO.comentario());
+        feedback.setGrade(feedbackDTO.getGrade());
+        feedback.setComment(feedbackDTO.getComentario());
         feedback.setCreatedAt(agora);
         feedback.setUpdatedAt(agora);
         return feedback;

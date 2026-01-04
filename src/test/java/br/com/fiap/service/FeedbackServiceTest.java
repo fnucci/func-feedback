@@ -5,22 +5,18 @@ import br.com.fiap.model.in.FeedbackDTO;
 import br.com.fiap.persistence.entity.Aluno;
 import br.com.fiap.persistence.entity.Curso;
 import br.com.fiap.persistence.entity.Feedback;
-import br.com.fiap.persistence.entity.ModelType;
 import br.com.fiap.persistence.repository.FeedbackRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 public class FeedbackServiceTest {
 
@@ -46,8 +42,8 @@ public class FeedbackServiceTest {
         setPrivateField(service, "queueService", mockQueueService);
 
         FeedbackDTO dto = Mockito.mock(FeedbackDTO.class);
-        when(dto.alunoId()).thenReturn(1L);
-        when(dto.cursoId()).thenReturn(2L);
+        when(dto.getAlunoId()).thenReturn(1L);
+        when(dto.getCursoId()).thenReturn(2L);
 
         Aluno aluno = Mockito.mock(Aluno.class);
         Curso curso = Mockito.mock(Curso.class);
@@ -90,8 +86,8 @@ public class FeedbackServiceTest {
         setPrivateField(service, "queueService", mockQueueService);
 
         FeedbackDTO dto = Mockito.mock(FeedbackDTO.class);
-        when(dto.alunoId()).thenReturn(1L);
-        when(dto.cursoId()).thenReturn(2L);
+        when(dto.getAlunoId()).thenReturn(1L);
+        when(dto.getCursoId()).thenReturn(2L);
 
         Aluno aluno = Mockito.mock(Aluno.class);
         Curso curso = Mockito.mock(Curso.class);
