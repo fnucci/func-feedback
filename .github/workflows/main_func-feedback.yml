@@ -1,37 +1,38 @@
-name: Deploy AWS Lambda
+name: Deploy AWS Lambda (Quarkus function.zip)
 
 on:
   push:
-    branches: [ main ] # Ou sua branch principal
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest # Ambiente para rodar o job
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3 # Pega o código do seu repositório
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials (usando IAM Role - Recomendado)
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          role-to-assume: arn:aws:iam::SEU_AWS_ACCOUNT_ID:role/SEU_IAM_ROLE_GITHUB_ACTION # Substitua pelo ARN da sua Role
-          aws-region: us-east-1 # Sua região AWS
+          distribution: temurin
+          java-version: "17"
+          cache: maven
 
-      # --- OU --- Use Chaves de Acesso (Menos Seguro, mas comum) ---
-      # - name: Configure AWS Credentials (usando chaves)
-      #   uses: aws-actions/configure-aws-credentials@v1
-      # with:
-      #   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #   aws-region: us-east-1
+      - name: Build
+        run: mvn -B clean package
 
-      - name: Zip the Lambda code
-        run: zip -r lambda.zip . # Cria um zip dos seus arquivos de código (ajuste se necessário)
-
-      - name: Deploy Lambda function
-        uses: aws-actions/aws-lambda-deploy@v1 # Ação oficial da AWS para deploy
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          function-name: minha-funcao-lambda # Nome da sua função Lambda
-          zip-file: lambda.zip # Arquivo ZIP a ser enviado
-          # Se for usar AWS SAM, pode usar outras ações para empacotar/implantar [11]
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Lambda (function.zip)
+        run: |
+          test -f target/function.zip
+          aws lambda update-function-code \
+            --function-name "${{ secrets.LAMBDA_FUNCTION_NAME }}" \
+            --zip-file "fileb://target/function.zip"
