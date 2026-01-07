@@ -1,6 +1,5 @@
 package br.com.fiap.model.out;
 
-import br.com.fiap.persistence.entity.Aluno;
 import br.com.fiap.persistence.entity.ModelType;
 
 import java.time.OffsetDateTime;

@@ -17,12 +17,8 @@ public class FeedbackResource implements RequestHandler<FeedbackDTO, FeedbackRes
 
     @Override
     public FeedbackResponse handleRequest(FeedbackDTO requestDTO, Context context) {
-
         LambdaLogger logger = context.getLogger();
-
         logger.log("Processing feedback submission.");
-
-
         return feedbackService.cadastrarFeedback(requestDTO);
     }
 }

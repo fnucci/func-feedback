@@ -21,15 +21,6 @@ public class AlunoService {
     AlunoRepository alunoRepository;
 
     @Transactional
-    public AlunoResponse cadastrarAluno(AlunoDTO alunoDTO) {
-        // Lógica para cadastrar um aluno
-        Aluno aluno = Aluno.fromAlunoDTO(alunoDTO);
-        //cadastra o aluno
-        alunoRepository.persist(aluno);
-        return AlunoPresenter.toResponse(aluno);
-    }
-
-    @Transactional
     public Aluno findById(Long alunoId) {
         // Lógica para cadastrar um aluno
         return alunoRepository.findById(alunoId);

@@ -26,32 +26,6 @@ public class CursoService {
     AlunoService alunoService;
 
     @Transactional
-    public CursoResponse cadastrarCurso(CursoDTO cursoDTO) {
-        // Lógica para cadastrar um aluno
-        Curso curso = Curso.fromCursoDTO(cursoDTO);
-        //cadastra o aluno
-        cursoRepository.persist(curso);
-        return CursoPresenter.toResponse(curso);
-    }
-
-    @Transactional
-    public MatriculaResponse matricularAluno(MatriculaDTO matriculaDTO) {
-        // Lógica para cadastrar um aluno
-        Curso curso = cursoRepository.findById(matriculaDTO.cursoId());
-
-        Aluno aluno = alunoService.findById(matriculaDTO.alunoId());
-
-        if(curso.getStudents().contains(aluno)) {
-            throw new AlunoJaMatriculadoException("Aluno já está matriculado nesse curso.");
-        }else
-            curso.addStudent(aluno);
-
-        //cadastra o aluno
-        cursoRepository.persist(curso);
-        return new MatriculaResponse("Aluno matriculado com sucesso !");
-    }
-
-    @Transactional
     public List<CursoResponse> listarCursos() {
         Stream<Curso> cursoStream = cursoRepository.streamAll();
         return cursoStream
