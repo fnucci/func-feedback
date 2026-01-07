@@ -22,6 +22,7 @@ public class FeedbackResource implements RequestHandler<FeedbackDTO, FeedbackRes
 
         logger.log("Processing feedback submission.");
 
+
         return feedbackService.cadastrarFeedback(requestDTO);
     }
 }
