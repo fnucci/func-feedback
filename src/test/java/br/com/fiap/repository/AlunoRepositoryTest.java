@@ -1,9 +1,7 @@
 package br.com.fiap.repository;
 
-import br.com.fiap.persistence.entity.Aluno;
 import br.com.fiap.persistence.repository.AlunoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
