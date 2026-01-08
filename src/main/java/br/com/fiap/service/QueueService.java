@@ -58,19 +58,28 @@ public class QueueService {
         List<Message> messages = sqsClient.receiveMessage(ReceiveMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .maxNumberOfMessages(1)
-                .waitTimeSeconds(5) // long polling (melhor)
+                .waitTimeSeconds(5)
                 .build()).messages();
 
-        if (messages.isEmpty()) return;
+        log.info("Mensagens recebidas da fila: {}", messages.size());
+
+        if (messages.isEmpty()) {
+            log.info("Nenhuma mensagem encontrada na fila");
+            return;
+        }
 
         try {
             Message message = messages.get(0);
+            log.info("Processando mensagem: {}", message.body());
+
             NotaBaixaResponse notaBaixa = objectMapper.readValue(message.body(), NotaBaixaResponse.class);
+            log.info("Mensagem desserializada com sucesso: {}", notaBaixa);
 
             emailService.send(notaBaixa.email(), "Nota Baixa", notaBaixa.msg());
+            log.info("Email enviado com sucesso para: {}", notaBaixa.email());
 
         } catch (Exception e) {
-            log.error("Erro ao processar mensagem da fila SQS", e);
+            log.error("Erro ao processar mensagem da fila SQS: {}", e.getMessage() != null ? e.getCause() : "desconhecida", e);
             throw new RuntimeException(e);
         }
     }
