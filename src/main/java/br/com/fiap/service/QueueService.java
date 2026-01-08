@@ -2,6 +2,7 @@ package br.com.fiap.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
@@ -10,6 +11,7 @@ import software.amazon.awssdk.services.sqs.model.*;
 import java.util.List;
 
 @ApplicationScoped
+@Slf4j
 public class QueueService {
 
     private SqsClient sqsClient;
@@ -28,6 +30,8 @@ public class QueueService {
     }
 
     public void sendMessage(String messageBody) {
+        log.info("Enviando mensagem para a fila SQS: {}", messageBody);
+        log.info("Usando a fila SQS com URL: {}", queueUrl);
         sqsClient.sendMessage(SendMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .messageBody(messageBody)
