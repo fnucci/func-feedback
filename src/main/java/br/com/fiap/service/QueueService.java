@@ -19,24 +19,31 @@ public class QueueService {
     @ConfigProperty(name = "sqs.queue.url")
     String queueUrl;
 
-    @ConfigProperty(name = "aws.region", defaultValue = "sa-east-1")
-    String awsRegion;
-
     @PostConstruct
     void init() {
         this.sqsClient = SqsClient.builder()
-                .region(Region.of(awsRegion))
+                .region(Region.SA_EAST_1)
                 .build();
     }
 
     public void sendMessage(String messageBody) {
-        log.info("Enviando mensagem para a fila SQS: {}", messageBody);
-        log.info("Usando a fila SQS com URL: {}", queueUrl);
-        sqsClient.sendMessage(SendMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .messageBody(messageBody)
-                .build());
+        try {
+            log.info("Enviando mensagem para a fila SQS: {}", messageBody);
+            log.info("Usando a fila SQS com URL: {}", queueUrl);
+
+            var resp = sqsClient.sendMessage(SendMessageRequest.builder()
+                    .queueUrl(queueUrl)
+                    .messageBody(messageBody)
+                    .build());
+
+            log.info("Mensagem enviada com sucesso. messageId= {}", resp.messageId());
+
+        } catch (Exception e) {
+            log.error("Falha ao enviar mensagem para SQS", e);
+            throw e; // importante: se falhar, a Lambda deve falhar e mostrar o erro
+        }
     }
+
 
     public Message receiveMessage() {
         List<Message> messages = sqsClient.receiveMessage(ReceiveMessageRequest.builder()
