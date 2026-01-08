@@ -3,6 +3,7 @@ package br.com.fiap.service;
 import br.com.fiap.model.out.NotaBaixaResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -15,6 +16,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 import java.util.List;
 
 @Slf4j
+@ApplicationScoped
 public class QueueService {
 
     private SqsClient sqsClient;
