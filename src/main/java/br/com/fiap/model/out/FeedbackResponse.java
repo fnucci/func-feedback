@@ -1,7 +1,10 @@
 package br.com.fiap.model.out;
 
 public record FeedbackResponse (
-        String message
+        String studentName,
+        String courseName,
+        Short grade,
+        String mensagem
 ) {
 
 }
