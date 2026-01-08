@@ -8,11 +8,12 @@ import br.com.fiap.persistence.entity.Curso;
 import br.com.fiap.persistence.entity.Feedback;
 import br.com.fiap.persistence.repository.FeedbackRepository;
 import br.com.fiap.presenter.NotaBaixaPresenter;
+import io.quarkus.arc.Unremovable;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
-
+@Unremovable
 @ApplicationScoped
 public class FeedbackService {
 
