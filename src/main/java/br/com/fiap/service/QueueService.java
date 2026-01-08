@@ -1,20 +1,28 @@
 package br.com.fiap.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import br.com.fiap.model.out.NotaBaixaResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.*;
+import software.amazon.awssdk.services.sqs.model.Message;
+import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
+import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.util.List;
 
-@ApplicationScoped
 @Slf4j
 public class QueueService {
 
     private SqsClient sqsClient;
+
+    @Inject
+    private EmailService emailService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @ConfigProperty(name = "sqs.queue.url")
     String queueUrl;
@@ -44,22 +52,24 @@ public class QueueService {
         }
     }
 
-    public Message receiveMessage() {
+    public void receiveMessage() {
         List<Message> messages = sqsClient.receiveMessage(ReceiveMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .maxNumberOfMessages(1)
                 .waitTimeSeconds(5) // long polling (melhor)
                 .build()).messages();
 
-        if (messages.isEmpty()) return null;
+        if (messages.isEmpty()) return;
 
-        Message msg = messages.get(0);
+        try {
+            Message message = messages.get(0);
+            NotaBaixaResponse notaBaixa = objectMapper.readValue(message.body(), NotaBaixaResponse.class);
 
-        sqsClient.deleteMessage(DeleteMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .receiptHandle(msg.receiptHandle())
-                .build());
+            emailService.send(notaBaixa.email(), "Nota Baixa", notaBaixa.msg());
 
-        return msg;
+        } catch (Exception e) {
+            log.error("Erro ao processar mensagem da fila SQS", e);
+            throw new RuntimeException(e);
+        }
     }
 }
