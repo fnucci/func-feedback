@@ -44,7 +44,6 @@ public class QueueService {
         }
     }
 
-
     public Message receiveMessage() {
         List<Message> messages = sqsClient.receiveMessage(ReceiveMessageRequest.builder()
                 .queueUrl(queueUrl)
