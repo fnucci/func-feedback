@@ -43,23 +43,4 @@ public class QueueService {
             throw e; // importante: se falhar, a Lambda deve falhar e mostrar o erro
         }
     }
-
-    public Message receiveMessage() {
-        List<Message> messages = sqsClient.receiveMessage(ReceiveMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .maxNumberOfMessages(1)
-                .waitTimeSeconds(5) // long polling (melhor)
-                .build()).messages();
-
-        if (messages.isEmpty()) return null;
-
-        Message msg = messages.get(0);
-
-        sqsClient.deleteMessage(DeleteMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .receiptHandle(msg.receiptHandle())
-                .build());
-
-        return msg;
-    }
 }
