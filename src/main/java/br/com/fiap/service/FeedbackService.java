@@ -12,9 +12,11 @@ import io.quarkus.arc.Unremovable;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Unremovable
 @ApplicationScoped
+@Slf4j
 public class FeedbackService {
 
     @Inject
@@ -41,6 +43,7 @@ public class FeedbackService {
             feedbackRepository.persist(feedback);
 
             if (feedback.getGrade() < 5) {
+                log.info("Nota menor que 5 detectada. Enviando mensagem para a fila SQS.");
                 queueService.sendMessage(NotaBaixaPresenter.toResponse(feedback).toString());
             }
             return new FeedbackResponse("Feedback registrado com sucesso");
