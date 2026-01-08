@@ -33,11 +33,13 @@ public class FeedbackServiceTest {
         AlunoService mockAlunoService = Mockito.mock(AlunoService.class);
         CursoService mockCursoService = Mockito.mock(CursoService.class);
         FeedbackRepository mockFeedbackRepository = Mockito.mock(FeedbackRepository.class);
+        QueueService mockQueueService = Mockito.mock(QueueService.class);
 
         FeedbackService service = new FeedbackService();
         setPrivateField(service, "alunoService", mockAlunoService);
         setPrivateField(service, "cursoService", mockCursoService);
         setPrivateField(service, "feedbackRepository", mockFeedbackRepository);
+        setPrivateField(service, "queueService", mockQueueService);
 
         FeedbackDTO dto = Mockito.mock(FeedbackDTO.class);
         when(dto.getAlunoId()).thenReturn(1L);
@@ -63,7 +65,9 @@ public class FeedbackServiceTest {
 
             // assert
             assertNotNull(response);
+            assertEquals("Feedback registrado com sucesso", response.message());
             verify(mockFeedbackRepository, times(1)).persist(mockFeedback);
+            verify(mockQueueService, times(1)).sendMessage(anyString());
         }
     }
 
@@ -73,11 +77,13 @@ public class FeedbackServiceTest {
         AlunoService mockAlunoService = Mockito.mock(AlunoService.class);
         CursoService mockCursoService = Mockito.mock(CursoService.class);
         FeedbackRepository mockFeedbackRepository = Mockito.mock(FeedbackRepository.class);
+        QueueService mockQueueService = Mockito.mock(QueueService.class);
 
         FeedbackService service = new FeedbackService();
         setPrivateField(service, "alunoService", mockAlunoService);
         setPrivateField(service, "cursoService", mockCursoService);
         setPrivateField(service, "feedbackRepository", mockFeedbackRepository);
+        setPrivateField(service, "queueService", mockQueueService);
 
         FeedbackDTO dto = Mockito.mock(FeedbackDTO.class);
         when(dto.getAlunoId()).thenReturn(1L);
@@ -93,5 +99,6 @@ public class FeedbackServiceTest {
         assertThrows(AlunoNaoMatriculadoException.class, () -> service.cadastrarFeedback(dto));
 
         verifyNoInteractions(mockFeedbackRepository);
+        verifyNoInteractions(mockQueueService);
     }
 }

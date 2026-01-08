@@ -7,6 +7,7 @@ import br.com.fiap.persistence.entity.Aluno;
 import br.com.fiap.persistence.entity.Curso;
 import br.com.fiap.persistence.entity.Feedback;
 import br.com.fiap.persistence.repository.FeedbackRepository;
+import br.com.fiap.presenter.NotaBaixaPresenter;
 import io.quarkus.arc.Unremovable;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -27,6 +28,9 @@ public class FeedbackService {
     @Inject
     private FeedbackRepository feedbackRepository;
 
+    @Inject
+    private QueueService queueService;
+
     @Transactional
     public FeedbackResponse cadastrarFeedback(FeedbackDTO feedbackDTO) {
 
@@ -41,7 +45,12 @@ public class FeedbackService {
             Feedback feedback = Feedback.fromFeedbackDTO(feedbackDTO, aluno, curso);
             feedbackRepository.persist(feedback);
 
-            return new FeedbackResponse(feedback.getStudent().getName(), feedback.getCourse().getName(), feedback.getGrade(), feedback.getComment());
+            if (feedback.getGrade() < 5) {
+                log.info("Nota menor que 5 detectada. Enviando mensagem para a fila SQS.");
+                queueService.sendMessage(NotaBaixaPresenter.toResponse(feedback).toString());
+            }
+            return new FeedbackResponse("Feedback registrado com sucesso");
+
         } else {
             throw new AlunoNaoMatriculadoException("Apenas alunos matriculados podem enviar feedbacks.");
         }
