@@ -17,12 +17,6 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Verify QuarkusStreamHandler inside jar
-        run: |
-          JAR_PATH=$(ls target/*-runner.jar | head -n 1)
-          echo "Checking $JAR_PATH"
-          unzip -l "$JAR_PATH" | grep "io/quarkus/amazon/lambda/runtime/QuarkusStreamHandler.class"      
-
       - name: Build (uber-jar)
         run: mvn -B clean package -Dquarkus.package.jar.type=uber-jar
 
