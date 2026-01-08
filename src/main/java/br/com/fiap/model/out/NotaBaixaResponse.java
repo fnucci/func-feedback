@@ -4,6 +4,7 @@ public record NotaBaixaResponse(
         String aluno,
         String curso,
         Short nota,
-        String msg
+        String msg,
+        String email
 ) {
 }

@@ -10,7 +10,8 @@ public class NotaBaixaPresenter {
                 feedback.getStudent().getName(),
                 feedback.getCourse().getName(),
                 feedback.getGrade(),
-                "Instrutor, verifique o motivo da baixa nota do aluno e ofereça suporte adequado."
+                "Instrutor, verifique o motivo da baixa nota do aluno e ofereça suporte adequado.",
+                "rafaelskiss7@gmail.com"
         );
     }
 }
