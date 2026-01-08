@@ -38,6 +38,9 @@ public class FeedbackService {
 
         Curso curso = cursoService.findById(feedbackDTO.getCursoId());
 
+        log.info("Feedback DTO recebido: {}", feedbackDTO);
+
+
         if (curso.getStudents().contains(aluno)) {
             Feedback feedback = Feedback.fromFeedbackDTO(feedbackDTO, aluno, curso);
             feedbackRepository.persist(feedback);
