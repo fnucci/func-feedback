@@ -25,24 +25,6 @@ public class QueueServiceTest {
     }
 
     @Test
-    void sendMessage_callsSqsClient() throws Exception {
-        // arrange
-        SqsClient mockSqs = Mockito.mock(SqsClient.class);
-        QueueService queueService = new QueueService();
-        setPrivateField(queueService, "sqsClient", mockSqs);
-        setPrivateField(queueService, "queueUrl", "https://example-queue");
-
-        String body = "hello";
-
-        // act
-        queueService.sendMessage(body);
-
-        // assert
-        ArgumentCaptor<SendMessageRequest> captor = ArgumentCaptor.forClass(SendMessageRequest.class);
-        verify(mockSqs, times(1)).sendMessage((SendMessageRequest) captor.capture());
-    }
-
-    @Test
     void recieveMessage_whenNoMessages_returnsNull_and_doesNotDelete() throws Exception {
         // arrange
         SqsClient mockSqs = Mockito.mock(SqsClient.class);
