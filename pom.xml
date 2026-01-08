@@ -68,9 +68,9 @@
         </dependency>
 
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-amazon-ses</artifactId>
-            <version>2.16.12.Final</version>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>ses</artifactId>
+            <version>2.31.45</version>
         </dependency>
 
         <dependency>
