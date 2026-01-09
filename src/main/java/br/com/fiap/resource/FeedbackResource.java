@@ -5,6 +5,7 @@ import br.com.fiap.model.out.FeedbackResponse;
 import br.com.fiap.service.FeedbackService;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.arc.Arc;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,10 @@ public class FeedbackResource implements RequestHandler<FeedbackDTO, FeedbackRes
                 .instance(FeedbackService.class)
                 .get();
 
-        return feedbackService.cadastrarFeedback(requestDTO);
+        try {
+            return feedbackService.cadastrarFeedback(requestDTO);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

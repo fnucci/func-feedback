@@ -1,5 +1,7 @@
 package br.com.fiap.service;
 
+import br.com.fiap.model.out.FeedbackEmailDTO;
+import br.com.fiap.persistence.entity.Feedback;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +9,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+
+import static io.quarkus.amazon.lambda.runtime.AmazonLambdaMapperRecorder.objectMapper;
 
 @Slf4j
 @ApplicationScoped
@@ -24,14 +28,14 @@ public class QueueService {
                 .build();
     }
 
-    public void sendMessage(String messageBody) {
+    public void sendMessage(String jsonBody) {
         try {
-            log.info("Enviando mensagem para a fila SQS: {}", messageBody);
             log.info("Usando a fila SQS com URL: {}", queueUrl);
+            log.info("Enviando mensagem para a fila SQS: {}", jsonBody);
 
             var resp = sqsClient.sendMessage(SendMessageRequest.builder()
                     .queueUrl(queueUrl)
-                    .messageBody(messageBody)
+                    .messageBody(jsonBody)
                     .build());
 
             log.info("Mensagem enviada com sucesso. messageId= {}", resp.messageId());
