@@ -11,7 +11,7 @@ public class NotaBaixaPresenter {
                 feedback.getCourse().getName(),
                 feedback.getGrade(),
                 "Instrutor, verifique o motivo da baixa nota do aluno e ofereça suporte adequado.",
-                "rafaelskiss7@gmail.com"
+                "flpnucci@gmail.com"
         );
     }
 }
