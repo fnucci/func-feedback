@@ -9,14 +9,11 @@ import br.com.fiap.persistence.entity.Curso;
 import br.com.fiap.persistence.entity.Feedback;
 import br.com.fiap.persistence.repository.FeedbackRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import br.com.fiap.presenter.NotaBaixaPresenter;
 import io.quarkus.arc.Unremovable;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import static io.quarkus.amazon.lambda.runtime.AmazonLambdaMapperRecorder.objectMapper;
 
